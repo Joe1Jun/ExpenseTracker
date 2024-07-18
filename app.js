@@ -22,14 +22,10 @@ app.use(express.json());
 
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => {
 
-    res.render('index');
-})
-app.get('/entryPage', (req, res) => {
-    
-    res.render("entryPage");
-})
+app.use('/', require("./routes/pages"));
+app.use('/auth', require("./routes/auth"))
+
 
 app.listen(5002, () => {
 
