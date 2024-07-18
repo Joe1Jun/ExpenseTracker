@@ -6,10 +6,27 @@ const path = require('path');
 const mysql2 = require('mysql2')
 //import dotenv
 const dotenv = require('dotenv');
-
+//path to dotenv file
+dotenv.config({
+    path: './.env'
+})
 
 //store express as a variable called app
 const app = express();
+
+//connect to datebase
+
+const database = mysql2.createConnection({
+    host: process.env.DATABASE_HOST,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE 
+
+
+})
+
+
+
 //store the path to public directory in a variable
 //dirname gives you directory you are in and join allows you to join with another folder from that directory
 const publicDirectory = path.join(__dirname, '/public');
@@ -22,6 +39,16 @@ app.use(express.json());
 
 app.set('view engine', 'ejs');
 
+//connect to database 
+database.connect((error) =>{
+
+    if (error) {
+        console.log(error);
+    } else {
+        console.log("MYSQL Connected....")
+    }
+}
+)
 
 app.use('/', require("./routes/pages"));
 app.use('/auth', require("./routes/auth"))
