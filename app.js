@@ -22,6 +22,15 @@ app.use(express.json());
 
 app.set('view engine', 'ejs');
 
+app.get('/', (req, res) => {
+
+    res.render('index');
+})
+app.get('/entryPage', (req, res) => {
+    
+    res.render("entryPage");
+})
+
 app.listen(5002, () => {
 
     console.log("Server started on port 5002")
