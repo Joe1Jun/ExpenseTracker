@@ -56,9 +56,9 @@
       <div class="text-center">
         <button type="submit" class="btn btn-primary">Register User</button>
       </div>
-      <% if (message) { %>
+      <% if (typeof message !== 'undefined' && message) { %>
       <div class="d-flex p-0">
-        <!--message will display in a box beneath password in red . alert = red-->
+        <!-- Message will display in a box beneath password in red. alert = red -->
         <div class="alert alert-danger mt-2" role="alert"><%= message %></div>
       </div>
       <% } %>
