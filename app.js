@@ -3,9 +3,12 @@ const express = require('express');
 //import path
 const path = require('path');
 //import mysql2
+
 const mysql2 = require('mysql2')
 //import dotenv
 const dotenv = require('dotenv');
+//express handlebars
+
 //path to dotenv file
 dotenv.config({
     path: './.env'
@@ -38,6 +41,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.set('view engine', 'ejs');
+
+
+
 
 //connect to database 
 database.connect((error) =>{
