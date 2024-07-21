@@ -6,15 +6,9 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 // Import the promisify function from the util module to convert callback-based functions to promise-based
 const { promisify } = require('util');
+const db = require('../database'); // Import the database connection
 
-//create connection to database
-const db = mysql2.createConnection({
-    //access database information from env file
-    host: process.env.DATABASE_HOST,
-    user: process.env.DATABASE_USER,
-     password: process.env.DATABASE_PASSWORD,
-     database: process.env.DATABASE
-})
+
 // Exporting an asynchronous function named 'register' which handles user registration
 exports.register = (req, res) => {
     // Logging the request body to the console for debugging purposes
@@ -74,51 +68,93 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if( !email || !password ) {
+    if (!email || !password) {
       return res.status(400).render('login', {
         message: 'Please provide an email and password'
-      })
+      });
     }
 
     db.query('SELECT * FROM users WHERE email = ?', [email], async (error, results) => {
-      console.log(results);
-      if( !results || !(await bcrypt.compare(password, results[0].password)) ) {
-        res.status(401).render('login', {
+      if (error) {
+        console.log(error);
+        return res.status(500).send('Server error');
+      }
+      if (!results.length || !(await bcrypt.compare(password, results[0].password))) {
+        return res.status(401).render('login', {
           message: 'Email or Password is incorrect'
-        })
-      } else {
-        const id = results[0].id;
-
-        const token = jwt.sign({ id }, process.env.JWT_SECRET, {
-          expiresIn: process.env.JWT_EXPIRES_IN
         });
-
-        console.log("The token is: " + token);
-
-        const cookieOptions = {
-          expires: new Date(
-            Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
-          ),
-          httpOnly: true
-        }
-
-        res.cookie('jwt', token, cookieOptions );
-        res.status(200).redirect("/");
       }
 
-    })
+      const id = results[0].Id; // Ensure this matches your DB schema
+      const token = jwt.sign({ id: id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN
+      });
 
+      console.log("The token is: " + token);
+
+      const cookieOptions = {
+        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000),
+        httpOnly: true
+      };
+
+      res.cookie('jwt', token, cookieOptions);
+      return res.status(200).redirect('/');
+    });
   } catch (error) {
     console.log(error);
+    res.status(500).send('Server error');
   }
-}
+};
 
 
+//add logout and is logged In functions here
 
-
+// exports.logout = async (req, res) => {
   
+// }
+
+// exports.isLoggedin = async (req, res) => {
   
-  
+
+// }
+
+//add addExpense function
+// controllers/auth.js
+
+exports.addExpense = async (req, res) => {
+  try {
+    const { amount, description } = req.body;
+    const userId = req.user.Id;
+
+    console.log('User ID:', userId);
+
+    if (!amount || !description) {
+      return res.status(400).render('addExpense', {
+        message: "Please fill out all required fields"
+      });
+    }
+
+    const date = new Date().toISOString().split('T')[0];
+
+    db.query('INSERT INTO expenses (user_id, description, amount, date) VALUES (?, ?, ?, ?)', [userId, description, amount, date], (error, results) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).render('addExpense', {
+          message: "Error adding expense"
+        });
+      } else {
+        console.log(results);
+        return res.render('addExpense', {
+          message: 'Expense Added'
+        });
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Server error');
+  }
+};
+
 
     
   

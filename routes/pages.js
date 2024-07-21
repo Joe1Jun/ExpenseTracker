@@ -21,9 +21,9 @@ router.get('/register', (req, res) => {
 
 })
 
-router.get('/entryPage', (req, res) => {
+router.get('/addExpense', (req, res) => {
     
-    res.render("entryPage");
+    res.render("addExpense");
 })
 
 
