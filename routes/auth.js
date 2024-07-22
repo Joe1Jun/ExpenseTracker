@@ -10,8 +10,8 @@ router.post('/register', authController.register);
 
 router.post('/login', authController.login);
 
- router.post('/addExpense', verifyToken,  authController.addExpense)
+router.post('/addExpense', verifyToken,  authController.addExpense)
 
-   
+router.post('/deleteExpense', verifyToken,  authController.deleteExpense ) 
 
 module.exports = router;

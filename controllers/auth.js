@@ -118,8 +118,10 @@ exports.login = async (req, res) => {
 
 // }
 
-//add addExpense function
-// controllers/auth.js
+
+
+
+
 
 exports.addExpense = async (req, res) => {
   try {
@@ -134,7 +136,10 @@ exports.addExpense = async (req, res) => {
       });
     }
 
+    // Get the current date and format it
+    //need to make date less 
     const date = new Date().toISOString().split('T')[0];
+    
 
     db.query('INSERT INTO expenses (user_id, description, amount, date) VALUES (?, ?, ?, ?)', [userId, description, amount, date], (error, results) => {
       if (error) {
@@ -143,20 +148,8 @@ exports.addExpense = async (req, res) => {
           message: "Error adding expense"
         });
       } else {
-        // Fetch all expenses for the user after adding the new expense
-        db.query('SELECT * FROM expenses WHERE user_id = ?', [userId], (error, expensesResults) => {
-          if (error) {
-            console.log(error);
-            return res.status(500).render('addExpense', {
-              message: "Error fetching expenses"
-            });
-          } else {
-            return res.render('addExpense', {
-              message: 'Expense Added',
-              expenses: expensesResults
-            });
-          }
-        });
+        // Redirect to /addExpense after adding the new expense
+        return res.redirect('/addExpense');
       }
     });
 
@@ -165,6 +158,30 @@ exports.addExpense = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+exports.deleteExpense = async (req, res) => {
+  try {
+    const Id = req.body.Id;
+    if (!Id) {
+      return res.status(400).send('Expense Id is required');
+    }
+
+    db.query('DELETE FROM expenses WHERE Id = ?', [Id], (error, results) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).send('Server error');
+      } else {
+        // Redirect to /addExpense after deleting the expense
+        return res.redirect('/viewAllExpenses');
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Server error');
+  }
+};
+
+
 
 
     

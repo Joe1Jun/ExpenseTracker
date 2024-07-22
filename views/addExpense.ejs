@@ -57,20 +57,28 @@
           Add Expense
         </button>
       </form>
-      <% if (message) { %>
-      <p><%= message %></p>
-      <% } %> <% if (expenses && expenses.length > 0) { %>
+      <form action="/viewAllExpenses" method="GET">
+        <button type="submit" class="btn btn-danger">View all expenses</button>
+      </form>
+      <!-- checks if there are expenses being passed to the ejs page-->
+      <% if (expenses && expenses.length > 0) { %>
       <ul id="expense-list" class="list-group mt-3">
         <% expenses.forEach((expense, index) => { %>
-        <li class="list-group-item">
-          <h4><%= expense.description %></h4>
-          <p><%= expense.amount %></p>
-          <p><%= expense.date %></p>
-        </li>
+        <form
+          action="/auth/deleteExpense"
+          method="POST"
+          class="expense-item-form"
+        >
+          <li class="list-group-item rounded-3">
+            <h4><%= expense.description %></h4>
+            <p>€<%= expense.amount %></p>
+            <p><%= expense.date %></p>
+            <input type="hidden" name="Id" value="<%= expense.Id %>" />
+            <button type="submit" class="btn btn-danger">Delete Expense</button>
+          </li>
+        </form>
         <% }) %>
       </ul>
-      <% } else { %>
-      <p>No expenses found.</p>
       <% } %>
     </div>
 
@@ -78,6 +86,34 @@
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
-    ></script>
+    >
+        document.getElementById('expense-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const data = {
+          description: formData.get('description'),
+          amount: formData.get('amount')
+        };
+
+        const response = await fetch('/auth/addExpense', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log(result.message); // Log the success message
+
+          // Optionally, update the expense list without reloading the page
+          // loadExpenses();
+        } else {
+          console.error('Failed to add expense');
+        }
+      });
+    </script>
   </body>
 </html>
