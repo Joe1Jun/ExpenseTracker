@@ -57,13 +57,21 @@
           Add Expense
         </button>
       </form>
-      <% if (typeof message !== 'undefined' && message) { %>
-      <div class="d-flex p-0">
-        <!-- Message will display in a box beneath password in red. alert = red -->
-        <div class="alert alert-danger mt-2" role="alert"><%= message %></div>
-      </div>
+      <% if (message) { %>
+      <p><%= message %></p>
+      <% } %> <% if (expenses && expenses.length > 0) { %>
+      <ul id="expense-list" class="list-group mt-3">
+        <% expenses.forEach((expense, index) => { %>
+        <li class="list-group-item">
+          <h4><%= expense.description %></h4>
+          <p><%= expense.amount %></p>
+          <p><%= expense.date %></p>
+        </li>
+        <% }) %>
+      </ul>
+      <% } else { %>
+      <p>No expenses found.</p>
       <% } %>
-      <ul id="expense-list" class="list-group mt-3"></ul>
     </div>
 
     <script

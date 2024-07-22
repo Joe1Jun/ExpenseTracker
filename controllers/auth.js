@@ -143,12 +143,23 @@ exports.addExpense = async (req, res) => {
           message: "Error adding expense"
         });
       } else {
-        console.log(results);
-        return res.render('addExpense', {
-          message: 'Expense Added'
+        // Fetch all expenses for the user after adding the new expense
+        db.query('SELECT * FROM expenses WHERE user_id = ?', [userId], (error, expensesResults) => {
+          if (error) {
+            console.log(error);
+            return res.status(500).render('addExpense', {
+              message: "Error fetching expenses"
+            });
+          } else {
+            return res.render('addExpense', {
+              message: 'Expense Added',
+              expenses: expensesResults
+            });
+          }
         });
       }
     });
+
   } catch (error) {
     console.log(error);
     res.status(500).send('Server error');

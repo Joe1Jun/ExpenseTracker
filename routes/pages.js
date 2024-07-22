@@ -23,7 +23,9 @@ router.get('/register', (req, res) => {
 
 router.get('/addExpense', (req, res) => {
     
-    res.render("addExpense");
+    res.render("addExpense", {
+        expenses: ""
+    });
 })
 
 
