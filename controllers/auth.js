@@ -123,6 +123,7 @@ exports.login = async (req, res) => {
 
 
 
+//addExpense method to add expenses to database
 exports.addExpense = async (req, res) => {
   try {
     const { amount, description } = req.body;
@@ -149,7 +150,7 @@ exports.addExpense = async (req, res) => {
         });
       } else {
         // Redirect to /addExpense after adding the new expense
-        return res.redirect('/addExpense');
+        return res.redirect('/viewAllExpenses');
       }
     });
 

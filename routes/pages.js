@@ -4,9 +4,12 @@ const authController = require('../controllers/auth');
 const db = require("../database");
 const verifyToken = require('../middleware/auth');
 
-router.get('/', (req, res) => {
+router.get('/', verifyToken,(req, res) => {
 
-    res.render('index');
+    const name = req.user.name;
+    res.render('index', {
+        name: name
+    });
 })
 
 router.get('/login', (req, res) => {
@@ -23,17 +26,18 @@ router.get('/register', (req, res) => {
 
 })
 
-router.get('/addExpense',  (req, res) => {
-    
+router.get('/addExpense', verifyToken,  (req, res) => {
+    const name = req.user.name;
     
     res.render("addExpense", {
-        expenses: ""
+        expenses: "",
+        name: name
     });
 })
 
 router.get('/viewAllExpenses',verifyToken, (req, res) =>{
     const userId = req.user.Id;
-    
+    const name = req.user.name;
     try {
         const userId = req.user.Id;
   db.query('SELECT * FROM expenses WHERE user_id = ? ', [userId], (error, expensesResults) => {
@@ -43,7 +47,9 @@ router.get('/viewAllExpenses',verifyToken, (req, res) =>{
           
         return res.render('addExpense', {
             message: 'Expense Added',
-            expenses: expensesResults
+            expenses: expensesResults,
+            name: name
+
           });
       }
           

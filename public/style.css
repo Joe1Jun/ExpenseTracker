@@ -1,28 +1,80 @@
-
-#navbar {
-    background-color: rgb(180, 98, 98)  ;
+*{
+    box-sizing: border-box;
 }
 
-.nav-link {
-    color: rgb(78, 67, 67) ;
+.navbar-nav .nav-item {
+    /* Adjust as needed the margin to the right of the nav items */
+    margin-right: 5px; 
+    /*color of nav items */
+    color:white;
+    font-weight: bold;
+
+  }
+  nav{
+   /* background colour of nav-bar */
+    background-color:rgb(127, 219, 139);
+    
+  }
+
+  #header{
+    padding: 50px auto;
+    margin-top: 100px;
+  }
+  
+  /* this is the class associated with the logo */
+  .navbar-brand img {
+    width: 100%;
+    height: auto;
+    /* Adjust the max-height as needed to fit within the navbar */
+    max-height: 80px;}
+  
+
+#viewAllBtn{
+    margin-top: 10px;
+    color: white;
+    background-color: rgb(129, 219, 129);
 }
-
-
 
 
 
 form{
-
-    padding: 20px;
+    /* makes the width 330px */
+    width: 330px;
+    /* overides default bootstrap classes for forms */
+    margin: auto !important;
 }
 #container{
 
-    padding: 20px;
-    background-color: rgb(227, 202, 202);
+    padding: 20px ;
+    margin: 10px auto;
+    background-color: rgb(189, 178, 178);
+    max-width: 500px;
 }
 #form-group{
 
     margin-top: 20px;
 }
 
+#expense-item {
+    margin-bottom: 10px; /* Adjust spacing as needed */
+    padding: 10px;       /* Optional: Add padding for better spacing inside the list item */
+    border: 1px solid #ddd; /* Optional: Add a border for better visual separation */
+    border-radius: 5px;  /* Optional: Add rounded corners */
+  }
+  #profile-icon{
+
+    max-height: 40px;
+    margin-right: 6px;
+  }
+
+  #profile {
+    color: black !important; /* Override Bootstrap's link color */
+    font-weight: bold;
+    text-decoration: none; /* Remove underline */
+}
+
+#login-form{
+
+    margin-top: 100px;
+}
 
