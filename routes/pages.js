@@ -26,6 +26,8 @@ router.get('/register', (req, res) => {
 
 })
 
+
+
 router.get('/addExpense', verifyToken,  (req, res) => {
     const name = req.user.name;
     

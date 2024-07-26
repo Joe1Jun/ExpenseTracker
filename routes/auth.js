@@ -10,6 +10,8 @@ router.post('/register', authController.register);
 
 router.post('/login', authController.login);
 
+router.get('/logout', authController.logout)
+
 router.post('/addExpense', verifyToken,  authController.addExpense)
 
 router.post('/deleteExpense', verifyToken,  authController.deleteExpense ) 

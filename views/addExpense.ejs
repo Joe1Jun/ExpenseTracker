@@ -80,6 +80,7 @@
           <li class="list-group-item rounded-3" id="expense-item">
             <h4><%= expense.description %></h4>
             <p>€<%= expense.amount %></p>
+            <!-- refomat date -->
             <p><%= new Date(expense.date).toISOString().split('T')[0] %></p>
             <input type="hidden" name="Id" value="<%= expense.Id %>" />
             <div class="text-center">

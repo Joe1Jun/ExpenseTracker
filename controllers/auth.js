@@ -109,14 +109,25 @@ exports.login = async (req, res) => {
 
 //add logout and is logged In functions here
 
-// exports.logout = async (req, res) => {
+exports.logout = async (req, res) => {
   
-// }
+  // Log the logout action
+  console.log('User logged out:', req.user ? req.user.name : 'Unknown user');
+  res.cookie('jwt', 'logout', {
+    
+    expires: new Date(Date.now() + 2 * 1000),
+    httpOnly: true
+  })
 
-// exports.isLoggedin = async (req, res) => {
+   
+   res.status(200).redirect('/')
+}
+
+exports.isLoggedin = async (req, res) => {
   
 
-// }
+
+}
 
 
 
