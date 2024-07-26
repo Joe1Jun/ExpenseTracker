@@ -140,6 +140,7 @@ exports.addExpense = async (req, res) => {
     // Get the current date and format it
     //need to make date less 
     const date = new Date().toISOString().split('T')[0];
+    console.log(date); // This should output: YYYY-MM-DD
     
 
     db.query('INSERT INTO expenses (user_id, description, amount, date) VALUES (?, ?, ?, ?)', [userId, description, amount, date], (error, results) => {

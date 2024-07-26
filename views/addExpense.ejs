@@ -22,9 +22,7 @@
     <%- include('navbar', { name: name }) %>
 
     <div class="text-center" id="header">
-      <h1 class="mt-5">
-        <i class="fa-solid fa-user"></i><% if (name) { %> <%= name %> <% } %>
-      </h1>
+      <h1 class="mt-5"><% if (name) { %> <%= name %> <% } %></h1>
       <h2>Add your expense below</h2>
     </div>
     <div class="container rounded-3" id="container">
@@ -82,7 +80,7 @@
           <li class="list-group-item rounded-3" id="expense-item">
             <h4><%= expense.description %></h4>
             <p>€<%= expense.amount %></p>
-            <p><%= expense.date %></p>
+            <p><%= new Date(expense.date).toISOString().split('T')[0] %></p>
             <input type="hidden" name="Id" value="<%= expense.Id %>" />
             <div class="text-center">
               <button type="submit" class="btn btn-danger">
