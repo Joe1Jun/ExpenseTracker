@@ -12,9 +12,9 @@ router.get('/', verifyToken,(req, res) => {
     });
 })
 
-router.get('/login', (req, res) => {
+router.get("/login", (req, res) => {
 
-    res.render('login');
+    res.render("login");
 })
 
 router.get('/register', (req, res) => {

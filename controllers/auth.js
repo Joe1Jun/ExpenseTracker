@@ -79,6 +79,7 @@ exports.login = async (req, res) => {
         console.log(error);
         return res.status(500).send('Server error');
       }
+
       if (!results.length || !(await bcrypt.compare(password, results[0].password))) {
         return res.status(401).render('login', {
           message: 'Email or Password is incorrect'
@@ -107,7 +108,7 @@ exports.login = async (req, res) => {
 };
 
 
-//add logout and is logged In functions here
+
 
 exports.logout = async (req, res) => {
   

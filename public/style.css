@@ -95,3 +95,8 @@ main{
     margin-top: 100px;
 }
 
+#nav-title{
+    margin-left: 5px !important;
+    color: black;
+}
+
