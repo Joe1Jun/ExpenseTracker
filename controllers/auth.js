@@ -51,8 +51,10 @@ db.query('INSERT INTO users SET ?', {name: name, email: email, password: hashedP
     console.log(error);
   } else {
     //will render a message dynamically if user is registered
+    // will render the home page if registration is
     console.log(results);
-    return res.render('register', {
+    return res.render('registerSuccess', {
+      name : name ,
       message: 'User registered'
     });
   }

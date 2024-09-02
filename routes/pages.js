@@ -26,6 +26,15 @@ router.get('/register', (req, res) => {
 
 })
 
+router.get('/registerSuccess', (req, res) => {
+    
+    res.render('registerSuccess')
+
+       
+ 
+
+})
+
 
 
 router.get('/addExpense', verifyToken,  (req, res) => {
