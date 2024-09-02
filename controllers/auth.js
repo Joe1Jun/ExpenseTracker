@@ -11,59 +11,80 @@ const db = require('../database'); // Import the database connection
 
 // Exporting an asynchronous function named 'register' which handles user registration
 exports.register = (req, res) => {
-    // Logging the request body to the console for debugging purposes
-    console.log(req.body);
-     // Destructuring the 'name', 'email', 'password', and 'passwordConfirm' fields from the request body ie. the registration.ejs page
+  try {
+       // Destructuring the 'name', 'email', 'password', and 'passwordConfirm' fields from the request body ie. the registration.ejs page
      const { name, email, password, passwordConfirm } = req.body;
     
     
-    // Querying the database to check if the email already exists in the 'users' table
-    db.query('SELECT email FROM users WHERE email = ?', [email], async (error, results) => {
-      //console log error if error
-      if(error) {
-        console.log(error);
-      }
-        //if the results are greater than user the user email already exists in the database
-        if( results.length > 0 ) {
-            //renders register page with dynamically inserted message
-            return res.render('register', {
-                message: 'That email is already in use'
-              })
-            } 
-        //if password and passwordConfirm do not match render register page with message.
-        else if( password !== passwordConfirm ) {
-            return res.render('register', {
-              message: 'Passwords do not match'
-            });
-          }
-        // Hash the user's password with bcrypt
-// The bcrypt.hash function takes two arguments:
-//  The plain text password that the user provided
-// The number of salt rounds to use (a higher number means more hashing rounds and more security, but also more processing time)
-// The await keyword is used because bcrypt.hash is an asynchronous function that returns a promise
-        
-let hashedPassword = await bcrypt.hash(password, 8);
-console.log(hashedPassword);
-
- //insert user information into database.     
-db.query('INSERT INTO users SET ?', {name: name, email: email, password: hashedPassword }, (error, results) => {
-  if(error) {
-    console.log(error);
-  } else {
-    //will render a message dynamically if user is registered
-    // will render the home page if registration is
-    console.log(results);
-    return res.render('registerSuccess', {
-      name : name ,
-      message: 'User registered'
-    });
-  }
-})
-
-
-});
-
+     // Querying the database to check if the email already exists in the 'users' table
+     db.query('SELECT email FROM users WHERE email = ?', [email], async (error, results) => {
+       //console log error if error
+       if(error) {
+         console.log(error);
+       }
+         //if the results are greater than user the user email already exists in the database
+         if( results.length > 0 ) {
+             //renders register page with dynamically inserted message
+             return res.render('register', {
+                 message: 'That email is already in use'
+               })
+             } 
+         //if password and passwordConfirm do not match render register page with message.
+         else if( password !== passwordConfirm ) {
+             return res.render('register', {
+               message: 'Passwords do not match'
+             });
+           }
+         // Hash the user's password with bcrypt
+ // The bcrypt.hash function takes two arguments:
+ //  The plain text password that the user provided
+ // The number of salt rounds to use (a higher number means more hashing rounds and more security, but also more processing time)
+ // The await keyword is used because bcrypt.hash is an asynchronous function that returns a promise
+         
+ let hashedPassword = await bcrypt.hash(password, 8);
+ console.log(hashedPassword);
+ 
+  //insert user information into database.     
+ db.query('INSERT INTO users SET ?', {name: name, email: email, password: hashedPassword }, (error, results) => {
+   if(error) {
+     console.log(error);
+                     return res.status(500).render('register', {
+                         message: 'Error registering user'
+                     });
+                 } else {
+     //will render a message dynamically if user is registered
+     // will render the home page if registration is
+     console.log(results);
+     // Generate JWT token
+     const id = results.insertId; // Get the ID of the newly inserted user
+     const token = jwt.sign({ id: id }, process.env.JWT_SECRET, {
+         expiresIn: process.env.JWT_EXPIRES_IN
+     });
+     console.log("The token is: " + token);
+ 
+     // Set JWT token in a cookie
+     const cookieOptions = {
+       expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000),
+       httpOnly: true
+     };
+     res.cookie('jwt', token, cookieOptions);
+     
+     return res.status(200).render('registerSuccess', {
+       name : name ,
+       message: 'User registered'
+     });
+   }
+ })
+ 
+ 
+ });
+ 
+ } catch (error) {
+  console.log(error);
+  res.status(500).send('Server error');
 }
+     }
+    
 
 
 exports.login = async (req, res) => {
