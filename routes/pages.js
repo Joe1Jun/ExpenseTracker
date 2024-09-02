@@ -26,6 +26,20 @@ router.get('/register', (req, res) => {
 
 })
 
+router.get('/settings',verifyToken, (req, res) => {
+
+    const { name, Id } = req.body;
+   
+    res.render('settings', {
+        name: name,
+        Id: Id
+    });
+
+       
+ 
+
+})
+
 router.get('/registerSuccess', (req, res) => {
     
     res.render('registerSuccess')

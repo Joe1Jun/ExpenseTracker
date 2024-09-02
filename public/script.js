@@ -83,3 +83,27 @@ function deleteExpense(index) {
     renderExpenses();
 }
 
+
+function getQueryParams() {
+    const queryParams = {};
+    window.location.search
+      .substring(1)
+      .split("&")
+      .forEach(function (param) {
+        const [key, value] = param.split("=");
+        queryParams[decodeURIComponent(key)] = decodeURIComponent(value);
+      });
+    return queryParams;
+  }
+
+  // Show message if status is 'deleted'
+  document.addEventListener("DOMContentLoaded", function() {
+    const params = getQueryParams();
+    if (params.status === "deleted") {
+      const popup = document.getElementById("messagePopup");
+      popup.style.display = "block";
+      setTimeout(() => {
+        popup.style.display = "none";
+      }, 5000); // Hide the popup after 5 seconds
+    }
+  });

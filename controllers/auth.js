@@ -153,6 +153,26 @@ exports.isLoggedin = async (req, res) => {
 
 }
 
+exports.deleteAccount = async (req, res) => {
+
+  const Id = req.body.Id;
+     
+  db.query('DELETE FROM users WHERE Id = ?  ', [Id], (error, results) => {
+    if (error) {
+      console.log(error);
+      return res.status(500).send('Server error');
+    }
+    else {
+      console.log('Account deleted')
+      return res.redirect('/login?status=deleted');
+
+    }
+
+   })
+
+
+
+}
 
 
 
